@@ -1,0 +1,82 @@
+
+libcf is a collection of related classes for performing arithmetic on
+continued fractions.  It is intended primarily as a demonstration of
+Gosper's algorithms, not as a high-quality numeric calculation
+library.
+
+        #include "cf.h"
+
+        CF continued_fraction = new_cf(s);
+        int term = next(continued_fraction);
+
+        print_cf(continued_fraction);
+        fprint_cf(stream, continued_fraction);
+
+The abstract base class is "CF".  new_cf(s) allocates a continued
+fraction object of size s bytes.  Since CF is abstract, the object
+returned by new_cf() is not actually usable without additional work.
+It is provided as a convenience function for subclasses; see
+SUBCLASSING below.  However, any function that works on a generic CF
+object will also work on an object from one of its subclasses.
+
+next() accepts a continued fraction object and returns its next term,
+modifying the object in the process.
+
+fprint_cf() accepts a standard I/O stream and a continued fraction
+object and prints out all the terms of the ofraction to the specified
+stream.  print_cf(x) is equivalent to fprint_cf(stdout, x).
+
+
+        #include "cf_rat.h"
+
+        CF cf1 = new_rat(num, den);
+        CF cf2 = new_rat_from_float(real);
+
+These functions generate finite continued fractions that represent
+specific rational numbers.  new_rat() accepts an integer numerator and
+denominator.  new_rat_from_float accepts a floating point number,
+which is interpreted as a rational with a power-of-2 denominator.
+(For example, .333333333333333333 is interpreted as 357913941 /
+1073741824.)  The functions return continued fraction objects.  These
+objects can be used with any function that accepts CFs, such as next().
+
+        #include "cf_float.h"
+
+        CF cf = new_float(real);
+
+This function generates a CF object that represents the specified real
+number, which is given as a floating-point value.  Unlike
+new_rat_from_float(), the value is not immediately converted to a
+rational number.  When computing the terms of its continued-fraction
+expansion, floating-point arithmetic is used, with all its usual
+roundoff problems. 
+
+        #include "cf_holo.h"
+
+        CF cf = new_holo(a, b, c, d, x);
+
+Given integers a, b, c, and d, and a continued fraction object x,
+new_holo() returns a new continued fraction object that represents the
+value (ax+b)/(cx + d).  
+
+        #include "cf_arith.h"
+
+        CF cf = new_arith(a, b, c, d, 
+                          e, f, g, h, 
+                      x, y);
+
+        CF cf = cadd(x, y);
+        CF cf = csub(x, y);
+        CF cf = cmul(x, y);
+        CF cf = cdiv(x, y);
+
+Given integers a .. h and continued fraction objects x and y,
+new_arith() returns a new continued fraction object that represents
+the value (axy+bx+cy+d)/(exy+fx+gy+h).  
+
+Given continued fraction objects x and y, cadd(), csub(), cmul(), and
+cdiv() return x+y, x-y, x*y, and x/y, respectively.
+
+SUBCLASSING
+
+

@@ -54,10 +54,13 @@ roundoff problems.
         #include "cf_holo.h"
 
         CF cf = new_holo(a, b, c, d, x);
+        CF cf = new_dec(x);
 
 Given integers a, b, c, and d, and a continued fraction object x,
 new_holo() returns a new continued fraction object that represents the
-value (ax+b)/(cx + d).  
+value (ax+b)/(cx + d).  new_dec() takes a CF object x and returns
+something that appears to be a CF object, but which produces decimal
+digits instead of CF terms.
 
         #include "cf_arith.h"
 
@@ -76,6 +79,20 @@ the value (axy+bx+cy+d)/(exy+fx+gy+h).
 
 Given continued fraction objects x and y, cadd(), csub(), cmul(), and
 cdiv() return x+y, x-y, x*y, and x/y, respectively.
+
+        #include "cf_it.h"
+
+        int some_fun(unsigned);
+        CF cf = new_it(some_fun);
+        CF E = e();
+
+If some_fun() is a function that takes an unsigned int and returns an
+integer, new_it(some_fun) returns a CF object whose terms are
+
+        some_fun(0), some_fun(1), some_fun(2), ...
+
+The function e() returns a CF that represents the number e (2.71828...)
+
 
 SUBCLASSING
 

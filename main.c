@@ -3,8 +3,11 @@
 #include "cf_float.h"
 #include "cf_holo.h"
 #include "cf_arith.h"
+#include "cf_it.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#define STREQ(a,b) (strcmp((a),(b)) == 0)
 
 int 
 main(int argc, char **argv) 
@@ -17,14 +20,24 @@ main(int argc, char **argv)
     CF cfx, cfy;
 
   case 2:
-    f = atof(argv[1]);
-    cf = new_rat_from_float(f);
+    if (STREQ(argv[1], "e")) 
+      cf = new_dec(e());
+    else {
+      f = atof(argv[1]);
+      cf = new_rat_from_float(f);
+    }
     break;
 
   case 3:
-    n = atoi(argv[1]);
-    d = atoi(argv[2]);
-    cf = new_rat(n, d);
+    if (STREQ(argv[1], "->d")) {
+      f = atof(argv[2]);
+      cfx = new_rat_from_float(f);
+      cf = new_dec(cfx);
+    } else {
+      n = atoi(argv[1]);
+      d = atoi(argv[2]);
+      cf = new_rat(n, d);
+    }
     break;
 
   case 4:

@@ -4,6 +4,10 @@ LIBS=-lm
 
 default: demo
 
+HDRS= cf.h  cf_arith.h  cf_float.h  cf_holo.h  cf_it.h  cf_rat.h
+SRCS= cf.c  cf_arith.c  cf_float.c  cf_holo.c  cf_it.c  cf_rat.c  main.c
+MANS= demo.1 libcf.3
+
 cf.o: cf.c cf.h
 cf_arith.o: cf_arith.c cf_arith.h cf.h
 cf_float.o: cf_float.c cf_float.h cf.h
@@ -29,5 +33,5 @@ veryclean: clean
 
 dist: cf.tgz
 
-cf.tgz:
-	tar czvf cf.tgz *.[ch1-9]
+cf.tgz: $(SRCS) $(HDRS) $(MANS) Makefile
+	tar czf cf.tgz *.[ch1-9] Makefile

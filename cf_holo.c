@@ -61,7 +61,7 @@ next_holo(CF cf)
     fprintf(stderr, "I'm now %d %d / %d %d\n", cfh->a, cfh->b, cfh->c, cfh->d);
 #endif
     if (cfh->c == 0 && cfh->d == 0) 
-        return INFINITY;
+        return C_INF;
     else {
       float ub = bound(cfh->a, cfh->c), lb = bound(cfh->b, cfh->d);
       if ((int)ub == (int)lb) {
@@ -82,7 +82,7 @@ next_holo(CF cf)
 float
 bound(int n, int d) 
 {
-  return d == 0 ? INFINITY : (float)n/(float)d;
+  return d == 0 ? C_INF : (float)n/(float)d;
 }
 
 static void
@@ -116,7 +116,7 @@ ingest(CFH cf)
   if (cf->x_done) return;        /* err? */
 
   p = next(cf->x);
-  if (p == INFINITY) {
+  if (p == C_INF) {
 #ifdef DEBUG
     fprintf(stderr, "Ingested oo\n");
 #endif

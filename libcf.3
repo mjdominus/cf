@@ -231,27 +231,27 @@ Here's the implementation:
         int
         next_trunc(CF cf)
         {
-          if (cft->x_done) return INFINITY;
-          else if (cft->n == 0) return INFINITY;
+          if (cft->x_done) return C_INF;
+          else if (cft->n == 0) return C_INF;
           else { 
             int p = next(cft->x);
-            if (p == INFINITY) cft->x_done = 1;
+            if (p == C_INF) cft->x_done = 1;
             cft->n -= 1;
             return P;
           }
         }
 
 The only new machinery here is in next_trunc().  A CF can indicate
-that it has no more terms by returning the special constant INFINITY,
+that it has no more terms by returning the special constant C_INF,
 defined in cf.h.  Our CF_TRUNC object will do this if its counter
 indicates that it has already delivered the appropriate number of
 terms (cft->n == 0).  It also contains a flag, x_done, that records
-whether its input CF has been exhausted; it returns INFINITY to
+whether its input CF has been exhausted; it returns C_INF to
 indicate exhaustion in this case as well.
 
 If the input is not already known to be exhausted, next_trunc() uses
 the next() function provided by cf.h to read the next term from the
-input CF.  If this next term is INFINITY, indicating that no more data
+input CF.  If this next term is C_INF, indicating that no more data
 is available, it sets the x_done flag; it then decrements its counter
 and returns the term.
 

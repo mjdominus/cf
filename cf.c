@@ -26,13 +26,13 @@ int
 next(CF cf) {
   int t;
 
-  if (cf->DONE) return INFINITY;
+  if (cf->DONE) return C_INF;
 
   t = (cf->next)(cf);
 
   if (t > TOOBIG) {
     cf->DONE = 1;
-    t = INFINITY;
+    t = C_INF;
   }
 
   return t;
@@ -51,7 +51,7 @@ fprint_cf(FILE *f, CF cf)
 {
   int t;
   unsigned stop = STOP;
-  while ((t = next(cf)) != INFINITY) {
+  while ((t = next(cf)) != C_INF) {
     fprintf(f, "%d ", t);
     if (--stop == 0) break;
   }

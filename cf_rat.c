@@ -46,7 +46,7 @@ next_rat(CF cf)
 {
   int p, den = cfr->d;
 
-  if (den == 0) return INFINITY;
+  if (den == 0) return C_INF;
 
   p = cfr->n / den;            /* integer division */
   cfr->d = cfr->n - p * den;

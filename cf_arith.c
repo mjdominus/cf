@@ -21,8 +21,8 @@ static void ingest_x(CFA);
 static void ingest_y(CFA);
 
 #define MAX(i, j) ((i) > (j) ? (i) : (j))
-#define IDIFF(p, q) ((p) == INFINITY ? INFINITY : \
-                     (q) == INFINITY ? INFINITY : \
+#define IDIFF(p, q) ((p) == C_INF ? C_INF : \
+                     (q) == C_INF ? C_INF : \
                                        fabs((p)-(q)))
 
 CF
@@ -64,7 +64,7 @@ next_arith(CF cf)
             );
 #endif
     if (cfa->e == 0 && cfa->f == 0 && cfa->g == 0 && cfa->h == 0) 
-        return INFINITY;
+        return C_INF;
     else {
       double
         b11 = bound(cfa->a, cfa->e), 
@@ -105,7 +105,7 @@ next_arith(CF cf)
 float
 bound(int n, int d) 
 {
-  return d == 0 ? INFINITY : (float)n/(float)d;
+  return d == 0 ? C_INF : (float)n/(float)d;
 }
 
 void
@@ -134,7 +134,7 @@ ingest_x(CFA cf)
   int p;
 
   p = next(cf->x);
-  if (p == INFINITY) {
+  if (p == C_INF) {
 #ifdef DEBUG_IO
     fprintf(stderr, "Ingested oo from x\n");
 #endif
@@ -169,7 +169,7 @@ ingest_y(CFA cf)
   int p;
 
   p = next(cf->y);
-  if (p == INFINITY) {
+  if (p == C_INF) {
 #ifdef DEBUG_IO
     fprintf(stderr, "Ingested oo from y\n");
 #endif

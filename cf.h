@@ -9,7 +9,7 @@ typedef struct st_cf {
 } *CF;
 
 #include <limits.h>
-#define INFINITY INT_MAX
+#define C_INF INT_MAX
 #define TOOBIG 65535
 
 #ifdef DEBUG

@@ -30,7 +30,7 @@ next_float(CF cf)
 {
   int p;
 
-  if (cff->DONE) return INFINITY;
+  if (cff->DONE) return C_INF;
 
   p = (int)cff->d;
 #if 0

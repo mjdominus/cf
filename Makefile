@@ -24,4 +24,10 @@ clean:
 	rm -f *.o
 
 veryclean: clean
-	rm -f *.a demo
+	rm -f *.a demo cf.tgz
+
+
+dist: cf.tgz
+
+cf.tgz:
+	tar czvf cf.tgz *.[ch1-9]

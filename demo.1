@@ -1,0 +1,43 @@
+
+The CF library comes with a demonstration program called "demo".
+"demo" can be invoked in several ways:
+
+        demo n d
+
+This uses new_rat() to construct a continued fraction representing the
+rational number n/d.  The terms of the continued fraction are then
+printed.
+
+        demo real
+
+"real" is a real number, for example 1.4238.  new_rat_from_float() is
+used to build a continued fraction with this value, and its terms are
+then printed.
+
+        demo a b c d x
+
+"x" is a real number in decimal format as above.  a..d are integers. A
+continued fraction is built to represent the value of
+(ax+b)/(cx+d), and its terms are printed.
+
+        demo a b c d e f g h x y 
+
+"x" and "y" are real numbers as above.  a..h are integers.  A
+continued fraction is built to represent the value of
+(axy+bx+cy+d)/(exy+fx+gy+h), and its terms are printed.
+
+        demo x + y
+        demo x - y
+        demo x * y
+        demo x / y
+
+"x" and "y" are real numbers as above.  Continued fractions are built
+for these two numbers, and then a third continued fraction is built
+for their sum, difference, product, or quotient as indicated.  The
+terms of the result are printed. 
+
+Note that '*' is special in the shell and will need to be quoted.  The
+program will accept the letter "x" as a synonym.
+
+
+

@@ -1,8 +1,8 @@
 
-CFLAGS=-DDEBUG_IO
+#CFLAGS=-DDEBUG_IO
 LIBS=-lm
 
-DEFAULT: demo
+default: demo
 
 cf.o: cf.c cf.h
 cf_rat.o: cf_rat.c cf_rat.h cf.h

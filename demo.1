@@ -1,53 +1,133 @@
+.TH cf-demo 1 
+.SH NAME 
+cf-demo \- demonstration of continued fraction library
+.SH SYNOPSIS
+        cf-demo e         # calculate decimal expansion of \fIe\fR
+        cf-demo \fIx\fR         # calculate expansion of \fIreal\fR
+        cf-demo \fIn d\fR       # calculate expansion of \fIn/d\fR
+        cf-demo \fIa b c d x\fR # calculate expansion of \fI(ax+b)/(cd+x)\fR
+        cf-demo \fIa b c d e f h x y\fR # calculate expansion of \fI(axy+bx+cy+d)/(exy+fx+gy+h)\fR
+        cf-demo \fIx\fR + \fIy\fR   # calculate expansion of \fIx\fR + \fIy\fR
+        cf-demo \fIx\fR - \fIy\fR   # calculate expansion of \fIx\fR - \fIy\fR
+        cf-demo \fIx\fR * \fIy\fR   # calculate expansion of \fIx\fR * \fIy\fR
+        cf-demo \fIx\fR / \fIy\fR   # calculate expansion of \fIx\fR / \fIy\fR
+        cf-demo '->d' \fIx\fR       # calculate decimal expansion of \fIx\fR
 
-The CF library comes with a demonstration program called "demo".
-"demo" can be invoked in several ways:
+.SH DESCRIPTION
 
-        demo n d
+.B cf-demo
+is a demonstration program for the 
+.BF cf
+continued-fraction calculation library. 
+.B demo
+can be invoked in several ways to exercise the various features of
+.BR cf .
 
-This uses new_rat() to construct a continued fraction representing the
-rational number n/d.  The terms of the continued fraction are then
-printed.
+.IP \fBdemo\ \fIn\ d\fR
+calculates and prints the continued-fraction expansion of the rational
+number 
+.IR n / d 
+where 
+.I n 
+and 
+.I d
+are integers.  The
+.B cf
+function 
+.IR new_rat ()
+is used to manufacture the continued-fraction object, and then 
+.IR print_cf ()
+is used to print the terms of the continued fraction.
 
-        demo real
+.IP \fBdemo\ \fIx\fR
+uses 
+.IR new_rat_from_float ()
+to build a continued fraction with the value of 
+.IR x ,
+which is a floating-point number in the usual format.
+The terms of the continued fraction are then printed.
 
-"real" is a real number, for example 1.4238.  new_rat_from_float() is
-used to build a continued fraction with this value, and its terms are
-then printed.
+.IP \fBdemo\ \fIa\ b\ c\ d\ x\fR
+first uses 
+.IR new_rat_from_float ()
+to convert 
+.I x
+to a continued fraction, and then
+.IR new_holo ()
+to calculate a continued-fraction expansion for the value
+.IR ax + b
+/
+.IR cx + d .
+The terms of this latter continued fraction are then printed.
+.I x
+should be in floating-point format; 
+.IR a ,\  b ,\  c ,\ and\  d
+should be integers. 
 
-        demo a b c d x
+.IP \fBdemo\ \fIa\ b\ c\ d\ e\ f\ g\ h\ x\ y\fR
+uses 
+.IR new_rat_from_float ()
+to convert 
+.IR x and y
+to continued fractions, and then
+.IR new_arith () 
+to calculate a continued-fraction expansion for the value
+.IR axy + bx + cy + d
+/
+.IR exy + fx + gy + h .
+The terms of this latter continued fraction are then printed.
+.I x
+and
+.I y
+should be in floating-point format; 
+.IR a ,\  b ,\  c ,\  d ,\  e ,\  f ,\  g ,\ and\  h
+should be integers. 
 
-"x" is a real number in decimal format as above.  a..d are integers. A
-continued fraction is built to represent the value of
-(ax+b)/(cx+d), and its terms are printed.
+.IP \fBdemo\ \fIx\ \fR+\ \fIy\fR
+.IP \fBdemo\ \fIx\ \fR-\ \fIy\fR
+.IP \fBdemo\ \fIx\ \fR*\ \fIy\fR
+.IP \fBdemo\ \fIx\ \fR/\ \fIy\fR
 
-        demo a b c d e f g h x y 
+.I x
+and 
+.I y
+are real numbers in floating-point format.  
+.IR new_rat_from_float ()
+is called to convert them to continued-fraction representation, and
+then  
+.IR new_arith () 
+is used to perform the indicated operation (addition, subtraction,
+multiplication, or division) is performed on the two values.  The
+terms of the result then printed.
 
-"x" and "y" are real numbers as above.  a..h are integers.  A
-continued fraction is built to represent the value of
-(axy+bx+cy+d)/(exy+fx+gy+h), and its terms are printed.
-
-        demo x + y
-        demo x - y
-        demo x * y
-        demo x / y
-
-"x" and "y" are real numbers as above.  Continued fractions are built
-for these two numbers, and then a third continued fraction is built
-for their sum, difference, product, or quotient as indicated.  The
-terms of the result are printed. 
-
+.P
 Note that '*' is special in the shell and will need to be quoted.  The
 program will accept the letter "x" as a synonym.
 
-        demo e
+.IP \fBdemo\ \fRe
 
-This calculates the decimal value of e (2.71818...) from the continued
-fraction representation.
+This calculates and prints the decimal value of \fIe\fR (2.71818...)
+from the continued fraction representation.  Specifically, the
+continued fraction [2; 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, 1, ...] is
+contstructed, and then
+.IR new_dec ()
+is used to convert it to a decimal.
 
-        demo '->d' x
+.IP  \fBdemo\ \fR'->d'\ \fIx\fR
 
-"x" is a real number as above.    The real number is converted to a
-continued fraction, which is then converted back to a sequence of
-decimal digits, which are displayed.
+.I x
+is a real number as above.  The real number is converted to a
+continued fraction, using
+.IR new_rat_from_float ().
+The continued fraction is then converted back to a sequence of
+decimal digits, using
+.IR new_dec (), 
+and the decimal digits are displayed.
+
+.SH AUTHOR
+
+Mark Jason Dominus (mjd@plover.com)
+
+
 
 

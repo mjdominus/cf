@@ -55,7 +55,7 @@ new_arith(int a, int b, int c, int d,
 static int
 next_arith(CF cf)
 {
-  int oops = 12;
+  int oops = 30;
   while (1) {
 #ifdef DEBUG_COEFFS
     fprintf(stderr, "I'm now %d %d %d %d / %d %d %d %d\n", 

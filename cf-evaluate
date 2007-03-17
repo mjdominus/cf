@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+#
+
+@ARGV or usage();
+
+my $x = [0, 1, 1, 0];
+
+sub input {
+  my ($x, $p) = @_;
+  my ($a, $b, $c, $d) = @$x;
+  [ $b, $a + $b*$p, $d, $c + $d*$p ];
+}
+
+sub val {
+  my $x = shift;
+  my ($a, $b, $c, $d) = @$x;
+  return [$b, $d];
+}
+
+for (@ARGV) {
+  $x = input($x, $_);
+  my $f = val($x);
+  printf "%8d / %8d   %20.20f\n", @$f, $f->[1] &&  $f->[0] / $f->[1];
+}
+
+sub usage {
+  print qq{Usage: $0 a1 a2 a3 ...
+The a_i are the partial quotients of a simple continued fraction.
+The program will print out the convergents.
+};
+  exit 1;
+}

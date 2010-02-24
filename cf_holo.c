@@ -1,6 +1,6 @@
 
-
 #include <math.h>
+#include <stdlib.h>
 #include "cf_holo.h"
 
 typedef struct st_cf_holo {

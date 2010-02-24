@@ -4,6 +4,7 @@
 #include "cf_rat.h"
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 void usage(char *argv0) {
   fprintf(stderr, "Usage: %s a/b c/d\n\tFind simplest fraction between a/b and c/d\n", argv0);

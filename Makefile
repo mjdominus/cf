@@ -64,8 +64,6 @@ cf.tgz: $(SRCS) $(HDRS) $(MANS) Makefile
 demo.ps: demo.1
 	groff -man demo.1 > demo.ps
 
-demo.pdf: demo.1
-	groff -man -Tdvi demo.1 > demo.dvi
-	dvipdf demo.dvi 
-	-rm demo.dvi
+demo.pdf: demo.ps
+	ps2pdf demo.ps
 

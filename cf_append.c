@@ -1,4 +1,5 @@
 
+#include <stdarg.h>
 #include "cf.h"
 #include "cf_append.h"
 #include "cf_per.h"
@@ -37,14 +38,13 @@ CF append1(CF a, int t)
 
 CF_appendcf(CF a0, ...)
 {
+  unsigned count_items(va_list *);
   unsigned n;
   va_list va;
 
   va_start(va, a0);
   n = 1 + count_items(&va);
   va_end(va);
-
-  
 }
 
 unsigned

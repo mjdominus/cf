@@ -1,0 +1,44 @@
+This is a small library for continued fraction calculations, written
+in C.  For more details about continued fractions and the algorithms
+herein, see 
+
+        http://perl.plover.com/yak/cftalk/
+
+The library is documented in "libcf.3".
+
+The Makefile builds a program called "cf-demo" that demonstrates the
+library.  This is fully documented in "demo.1".  A brief usage summary
+follows.
+
+        cf-demo num den
+
+Print the continued fraction expansion of rational number num/den.
+For example, "cf-demo 29 8" prints "3 1 1 1 2".
+
+	cf-demo x
+
+Print the continued fraction expansion of floating point number x.
+For example, "cf-demo 1.4142" prints "1 2 2 2 2 2 1 1 29 86 312".
+
+	cf-demo a b c d x
+
+Print the continued fraction expansion of (ax+b)/(cx+d) where
+a,b,c,d are integers and x is real.
+
+	cf-demo a b c d e f g h x y
+
+
+Print the continued fraction expansion of (axy+bx+cy+d)/(exy+fx+gy+h)
+where a..h are integers and x and y are real.
+
+	cf-demo x + y
+	cf-demo x - y
+	cf-demo x * y
+	cf-demo x / y
+
+x and y are first converted to continued fractions, and then the
+indicated calculation is performed; for example 'x + y' adds x and y.
+Then the resulting continued fraction is printed.  For convenience,
+'x' is accepted as a synonym for '*'.
+
+

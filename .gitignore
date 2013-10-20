@@ -1,0 +1,10 @@
+*.o
+*.a
+/between
+/cf-demo
+/man/demo.pdf
+/man/demo.ps
+/surd
+/surd2
+/t/appendtest
+/t/arraytest

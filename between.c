@@ -8,6 +8,7 @@
 
 void usage(char *argv0) {
   fprintf(stderr, "Usage: %s a/b c/d\n\tFind simplest fraction between a/b and c/d\n", argv0);
+  fprintf(stderr, "(unimplemented)\n");
   exit(0);
 }
 
@@ -43,6 +44,8 @@ int main(int argc, char **argv) {
       else 
 	usage(prog);
   }
+  fprintf(stderr, "unimplemented\n");
+  return 19;
 
   r = between(a[0], a[1]);
   print_cf(r);

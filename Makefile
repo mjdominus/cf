@@ -4,14 +4,13 @@
 # LDFLAGS=-g
 LIBS=-lm
 
-
-default: cf-demo between surd surd2 appendtest arraytest doc 
+default: cf-demo between surd surd2 t/appendtest t/arraytest doc
 
 HDRS= cf.h  cf_append.h cf_arith.h cf_between.h cf_float.h  cf_holo.h  cf_it.h  cf_rat.h cf_per.h
 SRCS= cf.c  cf_append.c cf_arith.c cf_between.c cf_float.c  cf_holo.c  cf_it.c  cf_rat.c cf_per.c main.c
-MANS= demo.1 libcf.3
+MANS= man/demo.1 man/libcf.3
 
-doc: demo.ps demo.pdf
+doc: man/demo.ps man/demo.pdf
 
 cf.o: cf.c cf.h
 cf_append.o: cf_append.c cf_append.h cf.h
@@ -29,8 +28,8 @@ cf-demo: main.o libcf.a
 between: between.o libcf.a
 	$(CC) $(LDFLAGS) -o between $^ $(LIBS)
 
-arraytest: arraytest.o libcf.a
-	$(CC) $(LDFLAGS) -o arraytest $^ $(LIBS)
+t/arraytest: t/arraytest.o libcf.a
+	$(CC) $(LDFLAGS) -o t/arraytest $^ $(LIBS)
 
 surd: surd.o libcf.a
 	$(CC) $(LDFLAGS) -o surd $^ $(LIBS)
@@ -38,8 +37,8 @@ surd: surd.o libcf.a
 surd2: surd2.o libcf.a
 	$(CC) $(LDFLAGS) -o surd2 $^ $(LIBS)
 
-appendtest: appendtest.o libcf.a
-	$(CC) $(LDFLAGS) -o appendtest $^ $(LIBS)
+t/appendtest: t/appendtest.o libcf.a
+	$(CC) $(LDFLAGS) -o t/appendtest $^ $(LIBS)
 
 libcf.a: cf.o cf_append.o cf_arith.o cf_between.o cf_rat.o cf_float.o cf_holo.o cf_arith.o cf_it.o cf_per.o
 	ar cr libcf.a $?
@@ -61,9 +60,9 @@ dist: cf.tgz
 cf.tgz: $(SRCS) $(HDRS) $(MANS) Makefile
 	tar czf cf.tgz *.[ch1-9] Makefile
 
-demo.ps: demo.1
-	groff -man demo.1 > demo.ps
+man/demo.ps: man/demo.1
+	groff -man man/demo.1 > man/demo.ps
 
-demo.pdf: demo.ps
-	ps2pdf demo.ps
+man/demo.pdf: man/demo.ps
+	ps2pdf man/demo.ps && mv demo.pdf man
 

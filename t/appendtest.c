@@ -1,6 +1,6 @@
 
-#include "cf_per.h"
-#include "cf_append.h"
+#include "../cf_per.h"
+#include "../cf_append.h"
 
 int main(void) 
 {

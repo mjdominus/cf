@@ -1,0 +1,258 @@
+
+libcf is a collection of related classes for performing arithmetic on
+continued fractions.  It is intended primarily as a demonstration of
+Gosper's algorithms, not as a high-quality numeric calculation
+library.
+
+        #include "cf.h"
+
+        CF continued_fraction = new_cf(s);
+        int term = next(continued_fraction);
+
+        print_cf(continued_fraction);
+        fprint_cf(stream, continued_fraction);
+
+The abstract base class is "CF".  new_cf(s) allocates a continued
+fraction object of size s bytes.  Since CF is abstract, the object
+returned by new_cf() is not actually usable without additional work.
+It is provided as a convenience function for subclasses; see
+SUBCLASSING below.  However, any function that works on a generic CF
+object will also work on an object from one of its subclasses.
+
+next() accepts a continued fraction object and returns its next term,
+modifying the object in the process.
+
+fprint_cf() accepts a standard I/O stream and a continued fraction
+object and prints out all the terms of the ofraction to the specified
+stream.  print_cf(x) is equivalent to fprint_cf(stdout, x).
+
+
+        #include "cf_rat.h"
+
+        CF cf1 = new_rat(num, den);
+        CF cf2 = new_rat_from_float(real);
+
+These functions generate finite continued fractions that represent
+specific rational numbers.  new_rat() accepts an integer numerator and
+denominator.  new_rat_from_float accepts a floating point number,
+which is interpreted as a rational with a power-of-2 denominator.
+(For example, .333333333333333333 is interpreted as 357913941 /
+1073741824.)  The functions return continued fraction objects.  These
+objects can be used with any function that accepts CFs, such as next().
+
+        #include "cf_float.h"
+
+        CF cf = new_float(real);
+
+This function generates a CF object that represents the specified real
+number, which is given as a floating-point value.  Unlike
+new_rat_from_float(), the value is not immediately converted to a
+rational number.  When computing the terms of its continued-fraction
+expansion, floating-point arithmetic is used, with all its usual
+roundoff problems. 
+
+        #include "cf_holo.h"
+
+        CF cf = new_holo(a, b, c, d, x);
+        CF cf = new_dec(x);
+
+Given integers a, b, c, and d, and a continued fraction object x,
+new_holo() returns a new continued fraction object that represents the
+value (ax+b)/(cx + d).  new_dec() takes a CF object x and returns
+something that appears to be a CF object, but which produces decimal
+digits instead of CF terms.
+
+        #include "cf_arith.h"
+
+        CF cf = new_arith(a, b, c, d, 
+                          e, f, g, h, 
+                      x, y);
+
+        CF cf = cadd(x, y);
+        CF cf = csub(x, y);
+        CF cf = cmul(x, y);
+        CF cf = cdiv(x, y);
+
+Given integers a .. h and continued fraction objects x and y,
+new_arith() returns a new continued fraction object that represents
+the value (axy+bx+cy+d)/(exy+fx+gy+h).  
+
+Given continued fraction objects x and y, cadd(), csub(), cmul(), and
+cdiv() return x+y, x-y, x*y, and x/y, respectively.
+
+        #include "cf_it.h"
+
+        int some_fun(unsigned);
+        CF cf = new_it(some_fun);
+        CF E = e();
+
+If some_fun() is a function that takes an unsigned int and returns an
+integer, new_it(some_fun) returns a CF object whose terms are
+
+        some_fun(0), some_fun(1), some_fun(2), ...
+
+The function e() returns a CF that represents the number e (2.71828...)
+
+
+SUBCLASSING
+
+We'll create a new subclass of CF, called "cf_aseq", to represent
+continued fractions whose terms are arithmetic sequences.  First we
+need an interface header, "cf_aseq.h".  The public interface of our
+new class is a single function, new_aseq(), which takes two integers,
+say a and d, and returns a CF object whose terms will be a, a+d, a+2d,
+... .  The interface header only needs to provide a declaration of
+this function:
+
+        #ifndef CF_H_ASEQ
+        #define CF_H_ASEQ
+
+        #include "cf.h"
+
+        CF new_aseq(int, int);
+
+        #endif
+
+The implementation must define this function, and also the structure
+that actually represents a cf_aseq value.  It starts like this:
+
+        #include "cf_aseq.h"
+
+        typedef struct st_cf_aseq {
+          BASE_CF;
+          int a, d;
+          unsigned n;
+        } *CF_ASEQ;
+
+        static int next_aseq(CF);
+
+BASE_CF is a macro that is provided by "cf.h".  It defines the
+structure members that are required to be present at the beginning of
+every CF object.  a, d, and n, however, belong to us.  We also declare
+a private function, next_aseq(), which we'll see shortly.
+
+Now we must provide the promised new_aseq() function:
+
+        CF
+        new_aseq(int a, int d) 
+        {
+          CF_ASEQ cf = (CF_ASEQ) new_cf(sizeof(struct st_cf_aseq));
+          if (cf == 0) return 0;
+
+          cf->a = a;
+          cf->d = d;
+          cf->n = 0;
+        
+          cf->next = next_aseq;
+          return (CF) cf;
+        }
+
+The function allocates a new CF object using new_cf; we pass it the
+size of the structure we want to allocate.  Then the function copies
+the a and d parameters into the new object.  The member n will be a
+counter that records what term will be next; initially, it is 0.
+cf->next is a member provided in BASE_CF; it's a pointer to a callback
+function whose job is to return the next term of the CF each time it's
+called.  We must now implement next_aseq:
+
+        static int
+        next_aseq(CF cf)
+        {
+           CF_ASEQ cfa = cf;
+           return cfa->a + cfa->d * cfa->n++;
+        }
+
+Since the function's argument is a generic CF, we allocate a variable
+"cfa" to serve as a CF_ASEQ-type alias for it.  This allows us to
+access the a, d, and n fields, which aren't available via the generic
+version of the object.  The function calculates the appropriate term,
+incrementing the n member along the way, and returns the appropriate
+value.
+
+An alternative formulation avoids the alias variable by using casts
+instead:
+
+        #define cfa ((CF_ASEQ)cf)
+
+        static int
+        next_aseq(CF cf)
+        {
+           return cfa->a + cfa->d * cfa->n++;
+        }
+
+
+Now let's see another example.  We'll call it CF_TRUNC.  It will take
+as input a CF object and return another CF whose terms are the same,
+except that it stops prematurely.
+
+Here's cf_trunc.h:
+
+        #ifndef CF_H_TRUNC
+        #define CF_H_TRUNC
+
+        #include "cf.h"
+
+        CF new_trunc(CF, unsigned);
+
+        #endif
+
+new_trunc() will get two arguments: the input CF, and an integer n
+that says to truncate the input after n terms.
+
+Here's the implementation:
+
+        #include "cf_trunc.h"
+
+        typedef struct st_cf_trunc {
+          BASE_CF;
+          CF x;
+          char x_done;
+          unsigned n;
+        } *CF_TRUNC;
+
+        static int next_trunc(CF);
+
+        CF
+        new_aseq(CF x, unsigned n)
+        {
+          CF_TRUNC cf = (CF_TRUNC) new_cf(sizeof(struct st_cf_trunc));
+          if (cf == 0) return 0;
+
+          cf->x = x;
+          cf->x_done = 0;
+          cf->n = n;
+        
+          cf->next = next_trunc;
+          return (CF) cf;
+        }
+
+        #define cft ((CF_TRUNC)cf)
+
+        int
+        next_trunc(CF cf)
+        {
+          if (cft->x_done) return C_INF;
+          else if (cft->n == 0) return C_INF;
+          else { 
+            int p = next(cft->x);
+            if (p == C_INF) cft->x_done = 1;
+            cft->n -= 1;
+            return P;
+          }
+        }
+
+The only new machinery here is in next_trunc().  A CF can indicate
+that it has no more terms by returning the special constant C_INF,
+defined in cf.h.  Our CF_TRUNC object will do this if its counter
+indicates that it has already delivered the appropriate number of
+terms (cft->n == 0).  It also contains a flag, x_done, that records
+whether its input CF has been exhausted; it returns C_INF to
+indicate exhaustion in this case as well.
+
+If the input is not already known to be exhausted, next_trunc() uses
+the next() function provided by cf.h to read the next term from the
+input CF.  If this next term is C_INF, indicating that no more data
+is available, it sets the x_done flag; it then decrements its counter
+and returns the term.
+
+
